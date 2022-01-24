@@ -9,7 +9,7 @@
 #include <unistd.h>
 #include <cerrno>
 #include <cstring>
-#include <exception>
+#include <stdexcept>
 
 Epoller::Epoller() : events_() {
     epollFd_ = epoll_create(5);
