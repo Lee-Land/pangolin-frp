@@ -13,6 +13,7 @@
 #include <cerrno>
 #include <wait.h>
 #include <cstring>
+#include <stdexcept>
 
 using std::pair;
 using std::vector;
