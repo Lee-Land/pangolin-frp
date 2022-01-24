@@ -6,7 +6,6 @@ include_directories(readini)
 
 add_subdirectory(src)
 add_subdirectory(readini)
-add_subdirectory(protobuf)
 
 add_executable(pangolin src/main/server.cpp)
 add_executable(pangolin-cli src/main/client.cpp)
