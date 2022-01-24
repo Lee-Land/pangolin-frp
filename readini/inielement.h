@@ -6,6 +6,7 @@
 #define READINI_INIELEMENT_H
 
 #include <unordered_map>
+#include <string>
 
 namespace ini {
 
