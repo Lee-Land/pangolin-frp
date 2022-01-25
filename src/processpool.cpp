@@ -204,12 +204,12 @@ void ProcessPool::runServer_(const std::pair<Host, Host> &mapping) {
     int forwardFd = fdwrapper::listenTcp(forwardHost);    //映射端 sock
 
     if (listenFd == -1) {
-        LOG_ERROR("port: %d listen fail. %s", publicHost.port, strerror(errno));
+        LOG_ERROR("address: %s:%d listen fail. %s", publicHost.hostName.c_str(), publicHost.port, strerror(errno));
         return;
     }
 
     if (forwardFd == -1) {
-        LOG_ERROR("port: %d listen fail. %s", forwardHost.port, strerror(errno));
+        LOG_ERROR("address: %s:%d forward of listen fail. %s",forwardHost.hostName.c_str(), forwardHost.port, strerror(errno));
         return;
     }
 

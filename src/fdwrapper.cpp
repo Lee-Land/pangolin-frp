@@ -72,6 +72,7 @@ namespace fdwrapper {
         }
 
         if ((bind(sockFd, (struct sockaddr *) &address, sizeof(address)) == -1) || (listen(sockFd, 5) == -1)) {
+            LOG_ERROR("%s\n", strerror(errno));
             close(sockFd);
             return -1;
         }

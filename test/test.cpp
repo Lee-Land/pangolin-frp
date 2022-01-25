@@ -134,10 +134,40 @@ void test_server(int port) {
 
     Buffer buffer;
 
-    Host host;
-    host.hostName = "127.0.0.1";
-    host.port = port;
-    int listenFd = fdwrapper::listenTcp(host);
+    int listenFd = socket(PF_INET, SOCK_STREAM, 0);
+    if (listenFd < 0) {
+        printf("socket call fail.%s\n", strerror(errno));
+        return;
+    }
+
+//    Host host;
+//    host.hostName = "119.91.195.167"; Listen 119.91.195.167
+//    host.port = port;
+    struct sockaddr_in host = {};
+    bzero(&host, sizeof(host));
+    host.sin_family = AF_INET;
+    inet_pton(AF_INET, "f119.91.195.168", &host.sin_addr);
+    host.sin_port = htons(port);
+//    int listenFd = fdwrapper::listenTcp(host);
+
+    int on = 1;
+    if (setsockopt(listenFd, SOL_SOCKET, SO_REUSEADDR, &on, sizeof(on)) == -1) {
+        close(listenFd);
+        printf("set reuseaddr fail.%s\n", strerror(errno));
+        return;
+    }
+
+    if (bind(listenFd, (struct sockaddr*)&host, sizeof (host)) == -1) {
+        close(listenFd);
+        printf("bind call fail.%s\n", strerror(errno));
+        return;
+    }
+
+    if (listen(listenFd, 5) == -1) {
+        close(listenFd);
+        printf("listen call fail.%s\n", strerror(errno));
+        return;
+    }
 
     epoller.addFd(listenFd, true);
 
