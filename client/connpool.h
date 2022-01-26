@@ -7,11 +7,12 @@
 
 #include <map>
 
-class Connector;
 class Epoller;
 class Host;
 
 namespace client {
+
+    class Connector;
 
     class ConnPool {
     public:

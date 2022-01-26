@@ -41,7 +41,7 @@ namespace server {
         LOG_DEBUG("Add one connection to connection pool.");
     }
 
-    Connector *ConnPool::pickConn(int cltFd) {
+    server::Connector *ConnPool::pickConn(int cltFd) {
         if (conns_.empty()) {
             LOG_ERROR("There are no free connections in the connection pool.");
             return nullptr;

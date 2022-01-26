@@ -243,6 +243,22 @@ namespace client {
                 } else if (evEvent & EPOLLIN) {     //可读事件
                     LOG_DEBUG("read event.");
 
+                    bool res = false;
+                    //判断是哪个端口的事件
+                    struct sockaddr_in addr = fdwrapper::getRemoteAddr(evFd, &res);
+                    if (!res) {
+                        LOG_ERROR("get remote address failed.");
+                        continue;
+                    }
+
+                    int eventPort = ntohs(addr.sin_port);
+                    if (eventPort == externalHost.port) {   //外网端口请求
+                        Connector* conn = connPool->pickConn(evFd);     //从连接池中选取一个连接
+                        if (conn->srvClosed) {
+
+                        }
+                    }
+
                 } else if (evEvent & EPOLLOUT) {    //可写事件
                     LOG_DEBUG("write event.");
                 } else {}

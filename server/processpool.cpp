@@ -250,7 +250,7 @@ namespace server {
                     }
                         /* 监听端有新连接，从连接池中选取一个转发端的连接并将该新连接初始化为客户端连接 */
                     else {
-                        Connector *conn = connPool->pickConn(connFd);
+                        server::Connector *conn = connPool->pickConn(connFd);
                         if (conn == nullptr) {  //连接池没有连接
                             fdwrapper::closeFd(connFd);
                             continue;

@@ -8,10 +8,10 @@
 #include <map>
 #include <arpa/inet.h>
 
-class Connector;
 class Epoller;
 
 namespace server {
+    class Connector;
 
     enum class OP_TYPE {
         READ,
