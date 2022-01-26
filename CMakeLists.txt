@@ -3,14 +3,18 @@ project(pangolin-frp)
 
 include_directories(include)
 include_directories(readini)
+include_directories(server)
+include_directories(client)
 
 add_subdirectory(src)
+add_subdirectory(server)
+add_subdirectory(client)
 add_subdirectory(readini)
 
-add_executable(pangolin src/main/server.cpp)
-add_executable(pangolin-cli src/main/client.cpp)
+add_executable(pangolin server/server.cpp)
 add_executable(mytest test/test.cpp)
+add_executable(pangolin-cli client/client.cpp)
 
-target_link_libraries(pangolin SRC READINI )
-target_link_libraries(pangolin-cli SRC READINI )
+target_link_libraries(pangolin SRC READINI SERVER_LIB)
 target_link_libraries(mytest SRC READINI)
+target_link_libraries(pangolin-cli SRC READINI CLIENT_LIB)

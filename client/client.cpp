@@ -43,7 +43,7 @@ int main(int argc, char* argv[]) {
             string::size_type n = internal_str.find(':');
             //格式错误
             if (n == string::npos) {
-                throw ini::ErrorLog("parameter of listen invalid.");
+                throw ini::ErrorLog("parameter of internal invalid.");
             }
 
             internal.hostName = internal_str.substr(0, n);
@@ -52,7 +52,7 @@ int main(int argc, char* argv[]) {
             string external_str = parameter["external"].asString();
             n = external_str.find(':');
             if (n == string::npos) {
-                throw ini::ErrorLog("parameter of forward invalid.");
+                throw ini::ErrorLog("parameter of external invalid.");
             }
 
             external.hostName = external_str.substr(0, n);
@@ -72,9 +72,9 @@ int main(int argc, char* argv[]) {
 
     showLogo();
 
-    ProcessPool* pool = ProcessPool::create(mappings.size());
+    client::ProcessPool* pool = client::ProcessPool::create(mappings.size());
     if (pool != nullptr) {
-        pool->run(mappings, RunType::CLIENT);
+        pool->run(mappings);
         delete pool;
     }
 

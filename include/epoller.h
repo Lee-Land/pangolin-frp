@@ -8,50 +8,33 @@
 #include <sys/epoll.h>
 #include <unordered_map>
 
-/*
- * Epoller 数据
- * */
-struct EventData {
-    int fd = -1;
-    unsigned int length = 0;
-    char *token = nullptr;
-};
-
-using EventDataSet = std::unordered_map<int, EventData *>;
 using EventType = uint32_t;
-
-const int MAX_EVENT_NUMBER = 10000;
 
 class Epoller {
 
 public:
-    Epoller() noexcept(false);
+    explicit Epoller(int maxEventNumber) noexcept(false);
 
     ~Epoller();
 
-    void addFd(int fd, bool etAble);
+    void addReadFd(int fd, bool etAble) const;
 
-    void addFd(int fd, bool etAble, EventData *eventData);
+    void removeFd(int fd) const;
 
     void modifyFd(int fd, EventType event) const;
 
-    void closeFd(int fd);
+    void closeFd(int fd) const;
 
     int wait(int timeout);
 
-    uint32_t event(size_t i) const;
-
-    EventData* eventData(size_t i);
+    EventType event(size_t i) const;
 
     int eventFd(size_t i) const;
 
 private:
-    void rmEventData_(int fd);
-
-private:
     int epollFd_;
-    EventDataSet eventDataSet_;
-    struct epoll_event events_[MAX_EVENT_NUMBER];
+    struct epoll_event* events_;
+    int maxEventNumber_;
 };
 
 #endif //PANGOLIN_FRP_EPOLLER_H
