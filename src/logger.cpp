@@ -16,11 +16,11 @@ using std::unordered_map;
  * 不同日志等级对应的标签
  * */
 static const char* level2tag[] = {
-        "[info]",
-        "[debug]",
-        "[warn]",
-        "[alert]",
-        "[error]"
+        "[INFO]",
+        "[DEBUG]",
+        "[WARNING]",
+        "[ALERT]",
+        "[ERROR]"
 };
 
 void Logger::write(Level level,

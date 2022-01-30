@@ -196,8 +196,8 @@ namespace client {
         Host internalHost = mapping.first;    //内网端口
         Host externalHost = mapping.second;   //外网端口
 
-        //创建与外网服务器连接的连接池
-        auto connPool = new client::ConnPool(epoller_, externalHost);
+        //创建与内网外网服务器连接的连接池
+        auto connPool = new client::ConnPool(epoller_, mapping);
 
         ssize_t ret = -1;
         int eventNumber;
@@ -247,20 +247,23 @@ namespace client {
                     //判断是哪个端口的事件
                     struct sockaddr_in addr = fdwrapper::getRemoteAddr(evFd, &res);
                     if (!res) {
-                        LOG_ERROR("get remote address failed.");
+                        LOG_ERROR("get remote address failed.error: %s", strerror(errno));
                         continue;
                     }
 
                     int eventPort = ntohs(addr.sin_port);
                     if (eventPort == externalHost.port) {   //外网端口请求
-                        Connector* conn = connPool->pickConn(evFd);     //从连接池中选取一个连接
-                        if (conn->srvClosed) {
 
+                        Connector* conn = connPool->pickConn(evFd);     //从连接池中选取一个连接
+                        if (!connPool->exist(evFd)) {   //该连接未使用
+                            connPool->usingConn(conn);
                         }
                     }
+                    connPool->process(evFd, OP_TYPE::READ);
 
                 } else if (evEvent & EPOLLOUT) {    //可写事件
                     LOG_DEBUG("write event.");
+                    connPool->process(evFd, OP_TYPE::WRITE);
                 } else {}
             }
         }

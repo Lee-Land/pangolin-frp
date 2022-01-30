@@ -25,7 +25,6 @@ namespace server {
     class Connector {
     public:
         Connector();
-
         ~Connector();
 
         void initClt(int fd, const sockaddr_in &addr);
@@ -43,21 +42,19 @@ namespace server {
         RET_CODE writeSrv();
 
     public:
-        static const size_t BUFFER_SIZE = 2048;
-
         int cltFd;             //客户端 fd
         sockaddr_in cltAddr;   //客户端地址
 
-        char *cltBuffer;       //客户端缓冲区
-        size_t cltReadIdx;     //客户端读到的位置
-        size_t cltWriteIdx;    //客户端写到的位置
+        char* cltBuffer;      //客户端缓冲区
+        size_t cltReadIdx;
+        size_t cltWriteIdx;
 
         int srvFd;             //服务端 fd
         sockaddr_in srvAddr;   //服务端地址
 
-        char *srvBuffer;       //服务端缓冲区
-        size_t srvReadIdx;     //服务端读到的位置
-        size_t srvWriteIdx;    //服务端写到的位置
+        char* srvBuffer;       //服务端缓冲区
+        size_t srvReadIdx;
+        size_t srvWriteIdx;
 
         bool srvClosed;        //服务端已关闭
     };

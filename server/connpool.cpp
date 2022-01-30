@@ -6,6 +6,7 @@
 #include "fdwrapper.h"
 #include "logger.h"
 #include "epoller.h"
+#include "proto.h"
 
 namespace server {
     ConnPool::ConnPool(Epoller *epoller) : epoller_(epoller) {
@@ -86,7 +87,7 @@ namespace server {
             return;
         }
 
-        if (conn->cltFd == fd) {
+        if (conn->cltFd == fd) {    //读取客户端
             int srvFd = conn->srvFd;
             switch (type) {
                 case OP_TYPE::READ: {
@@ -118,15 +119,14 @@ namespace server {
                     break;
                 }
                 case OP_TYPE::WRITE: {
-                    size_t len = conn->srvWriteIdx;
                     RET_CODE res = conn->writeClt();
+                    LOG_DEBUG("%d", res);
                     switch (res) {
                         case RET_CODE::TRY_AGAIN: {     //数据未写完，继续写
                             epoller_->modifyFd(fd, EPOLLOUT);
                             break;
                         }
                         case RET_CODE::BUFFER_EMPTY: {
-                            LOG_INFO("send %ld data to server.", len);
                             epoller_->modifyFd(srvFd, EPOLLIN);
                             epoller_->modifyFd(fd, EPOLLIN);
                             break;
@@ -182,7 +182,6 @@ namespace server {
                     break;
                 }
                 case OP_TYPE::WRITE: {
-                    size_t len = conn->cltWriteIdx;
                     RET_CODE res = conn->writeSrv();
                     switch (res) {
                         case RET_CODE::TRY_AGAIN: {
@@ -190,7 +189,6 @@ namespace server {
                             break;
                         }
                         case RET_CODE::BUFFER_EMPTY: {
-                            LOG_INFO("send %ld data to client.", len);
                             epoller_->modifyFd(cltFd, EPOLLIN);
                             epoller_->modifyFd(fd, EPOLLIN);
                             break;

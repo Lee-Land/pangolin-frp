@@ -14,11 +14,13 @@ public:
 };
 
 /**
- * 工作类型: Server/Client
+ * 消息头部
  * */
-enum class RunType {
-    SERVER,
-    CLIENT
+#pragma pack(push, 1)
+struct MsgHeader {
+    uint8_t cmd;        //控制码 0:普通数据, 1:外网客户端发起连接
+    uint32_t length;    //数据正文长度,不包含头部
 };
+#pragma pack(pop)
 
 #endif //PANGOLIN_FRP_PROTO_H

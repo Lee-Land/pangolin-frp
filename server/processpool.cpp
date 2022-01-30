@@ -236,28 +236,37 @@ namespace server {
                 /* 监听端或转发端连接到来 */
                 if (((evFd == listenFd) && (evEvent & EPOLLIN)) ||
                     ((evFd == forwardFd) && (evEvent & EPOLLIN))) {
-                    struct sockaddr_in peerAddr = {};
-                    memset(&peerAddr, 0, sizeof(peerAddr));
-                    socklen_t peerLen = sizeof(peerAddr);
 
-                    int connFd = accept(evFd, (struct sockaddr *) &peerAddr, &peerLen);
-                    if (connFd <= 0) continue;
+                    while (true) {
+                        struct sockaddr_in peerAddr = {};
+                        memset(&peerAddr, 0, sizeof(peerAddr));
+                        socklen_t peerLen = sizeof(peerAddr);
 
-                    /* 转发端有新连接，将它加入连接池 */
-                    if (evFd == forwardFd) {
-                        /* 添加服务端连接 */
-                        connPool->addConn(connFd, peerAddr);
-                    }
-                        /* 监听端有新连接，从连接池中选取一个转发端的连接并将该新连接初始化为客户端连接 */
-                    else {
-                        server::Connector *conn = connPool->pickConn(connFd);
-                        if (conn == nullptr) {  //连接池没有连接
-                            fdwrapper::closeFd(connFd);
-                            continue;
+                        int connFd = accept(evFd, (struct sockaddr *) &peerAddr, &peerLen);
+                        if (connFd == -1) {
+                            if (errno == EAGAIN || errno == EWOULDBLOCK) {
+                                break;
+                            } else {
+                                continue;
+                            }
                         }
 
-                        //将该连接初始化为客户端连接
-                        conn->initClt(connFd, peerAddr);
+                        /* 转发端有新连接，将它加入连接池 */
+                        if (evFd == forwardFd) {
+                            /* 添加服务端连接 */
+                            connPool->addConn(connFd, peerAddr);
+                        }
+                            /* 监听端有新连接，从连接池中选取一个转发端的连接并将该新连接初始化为客户端连接 */
+                        else {
+                            server::Connector *conn = connPool->pickConn(connFd);
+                            if (conn == nullptr) {  //连接池没有连接
+                                fdwrapper::closeFd(connFd);
+                                continue;
+                            }
+
+                            //将该连接初始化为客户端连接
+                            conn->initClt(connFd, peerAddr);
+                        }
                     }
                 }
                     /* 信号事件 */
