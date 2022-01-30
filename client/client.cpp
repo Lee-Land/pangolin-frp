@@ -34,32 +34,32 @@ int main(int argc, char* argv[]) {
         size_t size = iniConfig.size();
 
         ini::Parameters parameter;
-        Host internal, external;
+        Host intranet, publicc;
         //遍历配置项
         for (int i = 0; i < size; ++i) {
             parameter = iniConfig[i];
-            string internal_str = parameter["internal"].asString();
+            string intranet_str = parameter["intranet"].asString();
 
-            string::size_type n = internal_str.find(':');
+            string::size_type n = intranet_str.find(':');
             //格式错误
             if (n == string::npos) {
-                throw ini::ErrorLog("parameter of internal invalid.");
+                throw ini::ErrorLog("parameter of intranet invalid.");
             }
 
-            internal.hostName = internal_str.substr(0, n);
-            internal.port = stoi(internal_str.substr(n + 1, internal_str.length()));
+            intranet.hostName = intranet_str.substr(0, n);
+            intranet.port = stoi(intranet_str.substr(n + 1, intranet_str.length()));
 
-            string external_str = parameter["external"].asString();
-            n = external_str.find(':');
+            string publicc_str = parameter["public"].asString();
+            n = publicc_str.find(':');
             if (n == string::npos) {
-                throw ini::ErrorLog("parameter of external invalid.");
+                throw ini::ErrorLog("parameter of public invalid.");
             }
 
-            external.hostName = external_str.substr(0, n);
-            external.port = stoi(external_str.substr(n + 1, external_str.length()));
+            publicc.hostName = publicc_str.substr(0, n);
+            publicc.port = stoi(publicc_str.substr(n + 1, publicc_str.length()));
 
             //将映射对添加进映射数组
-            mappings.emplace_back(pair<Host, Host>(internal, external));
+            mappings.emplace_back(pair<Host, Host>(intranet, publicc));
         }
 
     } catch (const ios_base::failure& e1) {
