@@ -12,9 +12,7 @@ add_subdirectory(client)
 add_subdirectory(readini)
 
 add_executable(pangolin server/server.cpp)
-add_executable(mytest test/test.cpp)
 add_executable(pangolin-cli client/client.cpp)
 
 target_link_libraries(pangolin SRC READINI SERVER_LIB)
-target_link_libraries(mytest SRC READINI)
 target_link_libraries(pangolin-cli SRC READINI CLIENT_LIB)
