@@ -197,14 +197,14 @@ namespace client {
         Host externalHost = mapping.second;   //外网端口
 
         //创建与内网外网服务器连接的连接池
-        auto connPool = new client::ConnPool(epoller_, mapping);
+        client::ConnPool connPool(epoller_, mapping);
 
         ssize_t ret = -1;
         int eventNumber;
         while (!stop_) {
             eventNumber = epoller_->wait(EPOLL_WAIT_TIME);
             if (eventNumber == 0) {
-                connPool->recycleConn();    //回收连接池
+                connPool.recycleConn();    //回收连接池
             }
 
             if ((eventNumber) < 0 && (errno != EINTR)) {
@@ -254,22 +254,21 @@ namespace client {
                     int eventPort = ntohs(addr.sin_port);
                     if (eventPort == externalHost.port) {   //外网端口请求
 
-                        Connector* conn = connPool->pickConn(evFd);     //从连接池中选取一个连接
-                        if (!connPool->exist(evFd)) {   //该连接未使用
-                            connPool->usingConn(conn);
+                        Connector* conn = connPool.pickConn(evFd);     //从连接池中选取一个连接
+                        if (!connPool.exist(evFd)) {   //该连接未使用
+                            connPool.usingConn(conn);
                         }
                     }
-                    connPool->process(evFd, OP_TYPE::READ);
+                    connPool.process(evFd, OP_TYPE::READ);
 
                 } else if (evEvent & EPOLLOUT) {    //可写事件
                     LOG_DEBUG("write event.");
-                    connPool->process(evFd, OP_TYPE::WRITE);
+                    connPool.process(evFd, OP_TYPE::WRITE);
                 } else {}
             }
         }
 
         epoller_->closeFd(sigPipeFd[0]);
-        delete connPool;
         delete epoller_;
     }
 }
