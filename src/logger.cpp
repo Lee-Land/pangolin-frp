@@ -28,6 +28,8 @@ void Logger::write(Level level,
                    int line_num,
                    const char *format,
                    ...) {
+    if (level == Level::DEBUG) return;
+
     time_t tmp = time(nullptr);
     struct tm *cur_time = localtime(&tmp);
     if (!cur_time) {
