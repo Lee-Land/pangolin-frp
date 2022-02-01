@@ -179,12 +179,11 @@ namespace client {
         }
 
         epoller_->closeFd(sigPipeFd[0]);
-        delete epoller_;
-        epoller_ = nullptr;
     }
 
     ProcessPool::~ProcessPool() {
         delete[] subProcess_;
+        delete epoller_;
     }
 
 /**
@@ -269,6 +268,5 @@ namespace client {
         }
 
         epoller_->closeFd(sigPipeFd[0]);
-        delete epoller_;
     }
 }
