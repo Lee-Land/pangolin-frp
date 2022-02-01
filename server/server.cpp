@@ -72,7 +72,7 @@ int main(int argc, char* argv[]) {
 
     showLogo();
 
-    server::ProcessPool* pool = server::ProcessPool::create(mappings.size());
+    auto pool = server::ProcessPool::create(mappings.size());
     if (pool != nullptr) {
         pool->run(mappings);
         delete pool;
