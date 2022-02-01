@@ -212,7 +212,7 @@ namespace server {
         }
 
         //连接池
-        auto connPool = new server::ConnPool(epoller_);
+        server::ConnPool connPool(epoller_);
 
         epoller_->addReadFd(listenFd, true);
         epoller_->addReadFd(forwardFd, true);
@@ -254,11 +254,11 @@ namespace server {
                         /* 转发端有新连接，将它加入连接池 */
                         if (evFd == forwardFd) {
                             /* 添加服务端连接 */
-                            connPool->addConn(connFd, peerAddr);
+                            connPool.addConn(connFd, peerAddr);
                         }
                             /* 监听端有新连接，从连接池中选取一个转发端的连接并将该新连接初始化为客户端连接 */
                         else {
-                            server::Connector *conn = connPool->pickConn(connFd);
+                            server::Connector *conn = connPool.pickConn(connFd);
                             if (conn == nullptr) {  //连接池没有连接
                                 fdwrapper::closeFd(connFd);
                                 continue;
@@ -295,10 +295,10 @@ namespace server {
                     }
                 } else if (evEvent & EPOLLIN) {     //可读事件
                     LOG_DEBUG("read event.");
-                    connPool->process(evFd, server::OP_TYPE::READ);
+                    connPool.process(evFd, server::OP_TYPE::READ);
                 } else if (evEvent & EPOLLOUT) {    //可写事件
                     LOG_DEBUG("write event.");
-                    connPool->process(evFd, server::OP_TYPE::WRITE);
+                    connPool.process(evFd, server::OP_TYPE::WRITE);
                 } else {}
             }
         }
@@ -306,7 +306,6 @@ namespace server {
         epoller_->closeFd(listenFd);
         epoller_->closeFd(forwardFd);
         epoller_->closeFd(sigPipeFd[0]);
-        delete connPool;
         delete epoller_;
     }
 }
