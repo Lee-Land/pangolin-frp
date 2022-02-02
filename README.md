@@ -47,3 +47,4 @@ public = x.x.x.x:8080
 ```shell
 ssh -p 12345 user@publicip
 ```
+>ps:默认不开启debug日志输出，需使用-g参数开启
