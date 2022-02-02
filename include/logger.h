@@ -25,6 +25,8 @@ public:
     //    static void error(const char* content, ...);
     //    static void debug(const char* content, ...);
 public:
+    static void closeDebug();
+    static void openDebug();
     static void write(Level level,
                       const char *file_name,
                       int line_num,
@@ -39,6 +41,7 @@ private:
 private:
     //    std::string m_log_dir;  //日志目录
     //    std::queue<std::string> m_block_queue;    //阻塞队列
+    static bool debug_;
 };
 
 #define FILENAME(path) strrchr(path, '/') ? strrchr(path, '/') + 1 : path

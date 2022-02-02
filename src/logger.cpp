@@ -10,7 +10,16 @@
 #define LOG_BUFFER_SIZE 2048
 
 using std::string;
-using std::unordered_map;
+
+bool Logger::debug_ = false;
+
+void Logger::closeDebug() {
+    debug_ = false;
+}
+
+void Logger::openDebug() {
+    debug_ = true;
+}
 
 /**
  * 不同日志等级对应的标签
@@ -28,7 +37,7 @@ void Logger::write(Level level,
                    int line_num,
                    const char *format,
                    ...) {
-    if (level == Level::DEBUG) return;
+    if (!debug_ && level == Level::DEBUG) return;
 
     time_t tmp = time(nullptr);
     struct tm *cur_time = localtime(&tmp);

@@ -18,9 +18,14 @@ using std::vector;
 using std::pair;
 
 int main(int argc, char* argv[]) {
-    string configFileName = Config::parse(argc, argv);
+    Config config;
+    config.parse(argc, argv);
 
-    fstream input(configFileName, ios::in);
+    if (config.isDebug) {
+        Logger::openDebug();
+    }
+
+    fstream input(config.fileName, ios::in);
 
     ini::IniConfig iniConfig;
 

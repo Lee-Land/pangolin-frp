@@ -16,7 +16,11 @@ public:
     /**
      * 命令行参数解析出文件名
      * */
-    static std::string parse(int argc, char* argv[]);
+    void parse(int argc, char* argv[]);
+
+public:
+    std::string fileName;
+    bool isDebug;
 };
 
 #endif //CONFIG_H

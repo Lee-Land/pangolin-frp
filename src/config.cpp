@@ -24,13 +24,12 @@ void showLogo() {
 }
 
 void usage(const char *name) {
-    printf("usage: %s [-h] [-v] [-f config.json]\n", name);
+    printf("usage: %s [-h] [-v] [-f config.ini] [-g] Turn on debug logging\n", name);
 }
 
-string Config::parse(int argc, char **argv) {
-    string fileName;
+void Config::parse(int argc, char **argv) {
     int option;
-    while ((option = getopt(argc, argv, "f:vh")) != -1) {
+    while ((option = getopt(argc, argv, "f:vhg")) != -1) {
         switch (option) {
             case 'v': {  //版本信息
                 printf("%s %s\n", basename(argv[0]), VERSION);
@@ -42,6 +41,10 @@ string Config::parse(int argc, char **argv) {
             }
             case 'f': {  //指定文件名
                 fileName = string(optarg);
+                break;
+            }
+            case 'g': {  //开启调试
+                isDebug = true;
                 break;
             }
             case '?': {
@@ -60,6 +63,4 @@ string Config::parse(int argc, char **argv) {
         LOG_ERROR("please specified the config file.");
         exit(1);
     }
-
-    return fileName;
 }
