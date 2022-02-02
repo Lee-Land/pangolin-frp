@@ -27,7 +27,7 @@ void usage(const char *name) {
     printf("usage: %s [-h] [-v] [-f config.json]\n", name);
 }
 
-string Config::parseFileName(int argc, char **argv) {
+string Config::parse(int argc, char **argv) {
     string fileName;
     int option;
     while ((option = getopt(argc, argv, "f:vh")) != -1) {

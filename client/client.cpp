@@ -18,7 +18,7 @@ using std::vector;
 using std::pair;
 
 int main(int argc, char* argv[]) {
-    string configFileName = Config::parseFileName(argc, argv);
+    string configFileName = Config::parse(argc, argv);
 
     fstream input(configFileName, ios::in);
 
