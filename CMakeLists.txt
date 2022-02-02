@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.16)
 project(pangolin-frp)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14 -g")
+set(CMAKE_CXX_STANDARD 14)
 
 include_directories(include)
 include_directories(readini)
