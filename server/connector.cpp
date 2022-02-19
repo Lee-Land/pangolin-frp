@@ -13,7 +13,9 @@
 
 namespace server {
 
-    Connector::Connector() : cltAddr(), srvAddr(), cltFd(-1), srvFd(-1), srvClosed(false) {
+    Connector::Connector()
+            : cltAddr(), srvAddr(), cltFd(-1), srvFd(-1), srvClosed(false), cltReadIdx(0), cltWriteIdx(0),
+              srvReadIdx(0), srvWriteIdx(0) {
         cltBuffer = new char[BUFSIZ];
         if (!cltBuffer) {
             throw std::exception();
@@ -23,8 +25,6 @@ namespace server {
         if (!srvBuffer) {
             throw std::exception();
         }
-
-        cltReadIdx = cltWriteIdx = srvReadIdx = srvWriteIdx = 0;
     }
 
     Connector::~Connector() {
