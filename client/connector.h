@@ -7,7 +7,6 @@
 
 #include <cstddef>
 #include <arpa/inet.h>
-#include "buffer.h"
 
 namespace client {
 
