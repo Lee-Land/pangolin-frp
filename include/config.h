@@ -6,7 +6,6 @@
 #define CONFIG_H
 
 #include <string>
-#include <vector>
 
 void showLogo();
 void usage(const char* name);
