@@ -7,10 +7,8 @@
 
 #include <unistd.h>
 #include <cstring>
-#include <fstream>
 
 using std::string;
-using std::ifstream;
 
 const char* VERSION = "1.0";
 
