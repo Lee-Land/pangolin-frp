@@ -94,7 +94,7 @@ namespace server {
                     RET_CODE res = conn->readClt();
                     switch (res) {
                         case RET_CODE::OK: {
-                            LOG_INFO("receive %ld bytes data from client.", conn->cltReadIdx);
+                            LOG_DEBUG("receive %ld bytes data from client.", conn->cltReadIdx);
                         }
                         case RET_CODE::BUFFER_FULL: {
                             epoller_->modifyFd(srvFd, EPOLLOUT);
@@ -160,7 +160,7 @@ namespace server {
                     RET_CODE res = conn->readSrv();
                     switch (res) {
                         case RET_CODE::OK: {
-                            LOG_INFO("receive %ld bytes data from server.", conn->srvReadIdx);
+                            LOG_DEBUG("receive %ld bytes data from server.", conn->srvReadIdx);
                         }
                         case RET_CODE::BUFFER_FULL: {
                             epoller_->modifyFd(cltFd, EPOLLOUT);
