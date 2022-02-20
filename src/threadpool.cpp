@@ -7,7 +7,7 @@
 
 using std::thread;
 
-ThreadPool::ThreadPool(size_t threadNumber) : pool_(std::make_shared<Pool>()) {
+ThreadPool::ThreadPool(size_t threadNumber) : pool_(new Pool) {
     assert(threadNumber > 0);
 
     for (size_t i = 0; i < threadNumber; ++i) {
@@ -43,5 +43,7 @@ ThreadPool::~ThreadPool() {
         pool_->spinLock.Lock();
         pool_->stop = true;
         pool_->spinLock.UnLock();
+        delete pool_;
+        pool_ = nullptr;
     }
 }

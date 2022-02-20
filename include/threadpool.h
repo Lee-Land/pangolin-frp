@@ -6,10 +6,8 @@
 #define _THREAD_POOL_H
 
 #include <thread>
-#include <memory>
 #include <functional>
 #include <queue>
-#include <atomic>
 
 #include "spinlock.h"
 
@@ -30,7 +28,7 @@ private:
         SpinLock spinLock;                          //自旋锁
     };
 
-    std::shared_ptr<Pool> pool_;
+    Pool *pool_;
 };
 
 
