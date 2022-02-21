@@ -47,15 +47,15 @@ namespace server {
         sockaddr_in cltAddr;   //客户端地址
 
         char* cltBuffer;      //客户端缓冲区
-        std::atomic<size_t> cltReadIdx;
-        std::atomic<size_t> cltWriteIdx;
+        size_t cltReadIdx;
+        size_t cltWriteIdx;
 
         int srvFd;             //服务端 fd
         sockaddr_in srvAddr;   //服务端地址
 
         char* srvBuffer;       //服务端缓冲区
-        std::atomic<size_t> srvReadIdx;
-        std::atomic<size_t> srvWriteIdx;
+        size_t srvReadIdx;
+        size_t srvWriteIdx;
 
         bool srvClosed;        //服务端已关闭
     };
