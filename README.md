@@ -5,6 +5,9 @@
 > 支持多连接，支持单机多映射、多机多映射；
 <br>
 
+## 运行
+![structure](https://github.com/XiaMingJie/pangolin-frp/blob/main/%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F%E8%AE%BE%E8%AE%A1%E6%8B%93%E6%89%91%E5%9B%BE.png)
+
 ## 协议支持
 | 协议    | 是否支持 |
 | ---     | --- |
